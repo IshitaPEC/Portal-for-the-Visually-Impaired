@@ -1,0 +1,46 @@
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript"></script>
+<body>
+<a href="#" id="speak" style="visibility:hidden" class="waves-effect waves-light btn">Speak</a>
+<p style="text-align:center; font-size:50px" class="display-3" id="temp">Temperature: {{temperature}}</p>
+<p style="text-align:center; font-size:50px" class="display-3" id="humid">Humidity: {{humidity}}</p>
+</body>
+<script>
+$(function(){
+   setTimeout(function(){
+      $('#speak').click();//The link with the id "speak"
+    },1000);              //gets clicked after 1 second.
+});
+
+var weather = '{{ read_weather|escapejs }}';
+var json = JSON.parse(weather);
+$(function(){
+  var i;
+  if ('speechSynthesis' in window) {
+    $('#speak').click(function(){
+    for(i=0;i<4;i++)
+    {
+        var text = json.result[i];
+        var msg = new SpeechSynthesisUtterance();
+        var voices = window.speechSynthesis.getVoices();
+        msg.voice = voices[0];
+        msg.rate = 1;
+        msg.pitch = 1;
+        msg.text = text;
+        speechSynthesis.speak(msg);
+    }
+    })
+  } else {
+    $('#modal1').openModal();
+  }
+});
+
+$(function(){
+   setTimeout(function(){
+      window.location.replace("http://127.0.0.1:8000/intermediate");
+    },12000);
+});
+</script>
+</html>

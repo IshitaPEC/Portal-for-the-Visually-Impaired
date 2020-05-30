@@ -1,0 +1,57 @@
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript"></script>
+<body>
+  <ul>
+   {% for result in results %}
+   <li>
+      <h5 style="margin-top:5px">{{result}}</h5>
+    </li>
+  {% endfor %}
+
+  </ul>
+  <h7 style="visibility:hidden"> <a href="#" id="speak" class="display-1" >Speak</a></h7>
+</body>
+
+<script>
+
+$(function(){
+   setTimeout(function(){
+      $('#speak').click();//The link with the id "speak"
+    },1000);              //gets clicked after 1 second.
+});
+
+var news = '{{ read_news|escapejs }}';
+var json = JSON.parse(news);
+console.log(news);
+var no_of_news=Object.keys(news).length;
+$(function(){
+  var i;
+  if ('speechSynthesis' in window) {
+    $('#speak').click(function(){
+    for(i=0;i<2;i++)
+    {
+        var text = json.results[i];
+        var msg = new SpeechSynthesisUtterance();
+        var voices = window.speechSynthesis.getVoices();
+        msg.voice = voices[0];
+        msg.rate = 1;
+        msg.pitch = 1;
+        msg.text = text;
+        speechSynthesis.speak(msg);
+    }
+    })
+  } else {
+    $('#modal1').openModal();
+  }
+});
+
+$(function(){
+   setTimeout(function(){
+      window.location.replace("http://127.0.0.1:8000/intermediate");
+    },18000);
+});
+
+</script>
+</html>

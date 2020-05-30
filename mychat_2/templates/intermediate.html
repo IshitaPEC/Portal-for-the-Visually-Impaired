@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block links %}
+<script type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.95.1/js/materialize.min.js"></script>
+<link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+<link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+<link href="{% static 'vendor/simple-line-icons/css/simple-line-icons.css' %}"rel="stylesheet">
+<link href="{% static 'css/stylish-portfolio.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="message-input">
+  <div class="wrap">
+  <span id='message'></span>
+ <!--<div class="list-group">-->
+   <nav class="navbar navbar-default">
+     <div class="container-fluid">
+       <ul class="nav navbar-nav">
+         <li><a href="{% url "result" %}" style="visibility:hidden" id='chat'>Chat</a></li>
+          <li><a href="{% url "ass" %}" style="visibility:hidden" id='assistance'  >Jobs</a></li>
+          <li><a href="{% url "news" %}" style="visibility:hidden" id='news' >News</a></li>
+          <li><a href="{% url "weather" %}" style="visibility:hidden" id='weather' >Weather</a></li>
+       </ul>
+     </div>
+   </nav>
+<!--</div>-->
+
+<section class="content-section" id="portfolio">
+  <div class="container">
+    <div class="content-section-heading text-center">
+      <h2 class="mb-5">Jump to Sections</h2>
+    </div>
+    <div class="row no-gutters">
+      <div class="col-lg-6">
+        <a class="portfolio-item" href="{% url "result" %}">
+          <span class="caption">
+            <span class="caption-content">
+              <h2>Chatting</h2>
+              <p class="mb-0">Send messages by speaking them and listen received messages!!</p>
+            </span>
+          </span>
+          <img class="img-fluid" src="{% static 'img/portfolio-1.jpg' %}" alt="">
+        </a>
+      </div>
+      <div class="col-lg-6">
+        <a class="portfolio-item" href="{% url "ass" %}">
+          <span class="caption">
+            <span class="caption-content">
+              <h2>Assistance</h2>
+              <p class="mb-0">All the assistance available is shown and spoken to the user on command.</p>
+            </span>
+          </span>
+          <img class="img-fluid" src="{% static 'img/portfolio-2.jpg' %}" alt="">
+        </a>
+      </div>
+      <div class="col-lg-6">
+        <a class="portfolio-item" href="{% url "news" %}">
+          <span class="caption">
+            <span class="caption-content">
+              <h2>News</h2>
+              <p class="mb-0">Get latest news updates on techology,business,science,entertainment etc!</p>
+            </span>
+          </span>
+          <img class="img-fluid" src="{% static 'img/portfolio-3.jpg' %}" alt="">
+        </a>
+      </div>
+      <div class="col-lg-6">
+        <a class="portfolio-item" href="{% url "weather" %}">
+          <span class="caption">
+            <span class="caption-content">
+              <h2>Weather</h2>
+              <p class="mb-0">Get latest weather updates by speaking any city name!</p>
+            </span>
+          </span>
+          <img class="img-fluid" src="{% static 'img/portfolio-4.jpg' %}" alt="">
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+<button class="btn btn-primary btn-xl js-scroll-trigger" style="margin-left:625px" id="button">Click</button>
+  </div>
+</div>
+<script>
+
+$(function(){
+setTimeout(function(){
+ document.getElementById('button').click();
+},6000);
+});
+
+
+ var message = document.querySelector('#message');
+
+        var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+        var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
+
+        var grammar = '#JSGF V1.0;'
+
+        var recognition = new SpeechRecognition();
+        var speechRecognitionList = new SpeechGrammarList();
+        speechRecognitionList.addFromString(grammar, 1);
+        recognition.grammars = speechRecognitionList;
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+
+        recognition.onresult = function(event) {
+            var last = event.results.length - 1;
+            var command = event.results[last][0].transcript;
+            message.textContent = 'Voice Input: ' + command + '.';
+
+            if(command.toLowerCase() === 'news'){
+                document.querySelector('#news').click();
+            }
+            else if (command.toLowerCase() === 'weather'){
+                document.querySelector('#weather').click();
+            }
+            else if (command.toLowerCase() === 'assistance'){
+                document.querySelector('#assistance').click();
+            }
+            else if (command.toLowerCase() === 'chat'){
+                document.querySelector('#chat').click();
+            }
+        };
+
+        recognition.onspeechend = function() {
+            recognition.stop();
+        };
+
+        document.querySelector('#button').addEventListener('click', function(){
+            recognition.start();
+        });
+        $(function(){
+        setTimeout(function(){
+            var message = new SpeechSynthesisUtterance('Select chat, assistance, news or weather to access that facility.');
+            window.speechSynthesis.speak(message);
+            },1000);
+        });
+
+</script>
+{% endblock %}

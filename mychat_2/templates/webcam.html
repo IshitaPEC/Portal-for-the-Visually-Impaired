@@ -1,0 +1,24 @@
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript"></script>
+<body>
+    <a href="http://127.0.0.1:8000/login/" id="web_cam" >click to open web camera</a>
+</body>
+<script>
+
+$(function(){
+  setTimeout(function(){
+    var message = new SpeechSynthesisUtterance('Opening web camera');
+    window.speechSynthesis.speak(message);
+  },1000);
+});
+
+$(function(){
+   setTimeout(function(){
+     document.getElementById('web_cam').click();
+   },3000);   //The message is send after 12 seconds
+ });
+
+ </script>
+</html>

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block links %}
+<script type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.95.1/js/materialize.min.js"></script>
+{% endblock %}
+{% block content %}
+<div class="message-input">
+  <div class="wrap">
+ <h3 style="text-align:center"> <a href="#" id="speak" class="display-1" >Speak</a></h3>
+  </div>
+</div>
+
+<script>
+
+$(function(){  
+   setTimeout(function(){
+      $('#speak').click();//The link with the id "speak" 
+    },1000);              //gets clicked after 1 second.
+});
+
+var msgs = '{{ read_msg|escapejs }}';
+var json = JSON.parse(msgs);
+console.log(msgs);
+var no_of_msgs=Object.keys(msgs).length;
+$(function(){
+  var i;
+  if ('speechSynthesis' in window) {
+    $('#speak').click(function(){
+    for(i=0;i<no_of_msgs;i++)
+    {
+        var text = json[i]['fields']['msg'];
+        var msg = new SpeechSynthesisUtterance();
+        var voices = window.speechSynthesis.getVoices();
+        msg.voice = voices[0];
+        msg.rate = 1;
+        msg.pitch = 1;
+        msg.text = text;
+        speechSynthesis.speak(msg);
+    }
+    })
+  } else {
+    $('#modal1').openModal();
+  }
+});
+
+$(function(){  
+   setTimeout(function(){
+      window.location.replace("http://127.0.0.1:8000/intermediate");
+    },10000);            
+});
+
+</script>
+{% endblock %}

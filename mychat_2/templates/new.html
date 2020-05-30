@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<b ></b>
+
+<div class="form-group">
+  <div class="container">
+    <hr>
+      <h3>LOGIN</h3>
+      <p><a href="{%url 'eigentrain' %}" id="test"><b>Click to test your image</b></a></p>
+      <a href="{%url 'detect' %}" id="login"><b>Click to login</b></a>
+      <hr>
+      </div>
+</div>
+<script type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.95.1/js/materialize.min.js"></script>
+<script>
+
+$(function(){
+  setTimeout(function(){
+    var message = new SpeechSynthesisUtterance('Welcome to the login page. ');
+    window.speechSynthesis.speak(message);
+  },1000);
+});
+
+$(function(){
+setTimeout(function(){
+  document.getElementById('test').click();
+},3000);   //The message is send after 12 seconds of enabling
+});
+
+$(function(){
+setTimeout(function(){
+  document.getElementById('login').click();
+},10000);   //The message is send after 12 seconds of enabling
+});
+
+</script>
+{% endblock %}

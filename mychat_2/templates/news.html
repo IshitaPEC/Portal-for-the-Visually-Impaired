@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block links %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+{% endblock %}
+{% block content %}
+<ul class="list-group">
+  <li class="list-group-item list-group-item-success">Speak a for Category-Science</li>
+  <li class="list-group-item list-group-item-info">Speak b for Category-Entertainment</li>
+  <li class="list-group-item list-group-item-warning">Speak c for Category-Sports</li>
+  <li class="list-group-item list-group-item-info">Speak d for Category-health</li>
+  <li class="list-group-item list-group-item-danger">Speak e for Category-Technology</li>
+</ul>
+
+<form method="post" id="news_form" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="form-group">
+
+    <input  style="margin-left: 20px" class="form-control"name ="theInput" type="text" id="result" placeholder="The news you want..." >
+  </div>
+
+  <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+
+  </form>
+  <button class="btn btn-primary btn-xl js-scroll-trigger" style="margin-left: 20px" id="button" onclick="toggleStartStop()"></button>
+
+
+<ul>
+ {% for result in results %}
+ <li>
+    <h5 style="margin-top:5px">{{result}}</h5>
+  </li>
+{% endfor %}
+</ul>
+<script>
+$(function(){
+  setTimeout(function(){
+    var message = new SpeechSynthesisUtterance('Speak A for science, B for Entertainment, C for Sports, D for health and E for technology news updates');
+    window.speechSynthesis.speak(message);
+  },1000);
+});
+
+$(function(){
+setTimeout(function(){
+ document.getElementById('button').click();
+},9000);
+});
+
+var recognizing;
+var recognition = new webkitSpeechRecognition();
+recognition.continuous = true;
+reset();
+recognition.onend = reset();
+
+recognition.onresult = function (event) {
+  console.log("came");
+  for (var i = event.resultIndex; i < event.results.length; ++i) {
+    if (event.results[i].isFinal) {
+      result.value += event.results[i][0].transcript;
+      console.log(event.results[i][0].transcript);
+    }
+  }
+}
+
+function reset() {
+  recognizing = false;
+  button.innerHTML = "Click to Speak";
+}
+
+function toggleStartStop() {
+  if (recognizing) {
+    recognition.stop();
+    reset();
+  } else {
+    recognition.start();
+    recognizing = true;
+    button.innerHTML = "Click to Stop";
+     $(function(){
+   setTimeout(function(){
+      document.getElementById('news_form').submit();
+    },6000);
+});
+  }
+}
+
+</script>
+{% endblock %}
